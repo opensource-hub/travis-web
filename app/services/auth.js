@@ -226,7 +226,7 @@ export default Ember.Service.extend({
   syncingDidChange: Ember.observer('isSyncing', 'currentUser', function () {
     const user = this.get('currentUser');
     if (user && user.get('isSyncing') && !user.get('syncedAt')) {
-      return this.get('routing').transitionTo('first_sync');
+      return this.get('-routing').transitionTo('first_sync');
     }
   }),
 

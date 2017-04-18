@@ -6,6 +6,7 @@ import computed, { alias } from 'ember-computed-decorators';
 const { service } = Ember.inject;
 
 export default Ember.Service.extend({
+  routing: service('-routing'), // TODO: replace with public `router` service once it lands
   flashes: service(),
   store: service(),
   storage: service(),
@@ -225,9 +226,7 @@ export default Ember.Service.extend({
   syncingDidChange: Ember.observer('isSyncing', 'currentUser', function () {
     const user = this.get('currentUser');
     if (user && user.get('isSyncing') && !user.get('syncedAt')) {
-      return Ember.run.scheduleOnce('routerTransitions', this, function () {
-        return Ember.getOwner(this).lookup('router:main').send('renderFirstSync');
-      });
+      return this.get('routing').transitionTo('first_sync');
     }
   }),
 
